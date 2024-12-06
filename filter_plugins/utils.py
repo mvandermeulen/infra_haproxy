@@ -2,7 +2,6 @@ from re import sub as regex_replace
 
 
 class FilterModule(object):
-
     def filters(self):
         return {
             "ensure_list": self.ensure_list,
@@ -73,6 +72,7 @@ class FilterModule(object):
         return ' '.join([v for v in cls.ensure_list(v) if v not in cls.ensure_list(excludes)])
 
 
+    # pylint: disable=R0912,R0915
     @classmethod
     def build_route(cls, fe_cnf: dict, be_cnf: dict, be_name: str) -> list:
         lines = []
