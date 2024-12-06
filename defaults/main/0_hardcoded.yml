@@ -6,7 +6,6 @@ version_dehydrated: '0.7.1'
 cpu_arch: "{{ 'amd64' if ansible_architecture == 'x86_64' else ansible_architecture }}"
 
 HAPROXY_HC:
-  valid_versions: ['2.6', '2.7', '2.8', '2.9']
   path:
     config: '/etc/haproxy/conf.d'
     map: '/etc/haproxy/map'

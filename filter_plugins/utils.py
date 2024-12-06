@@ -48,14 +48,19 @@ class FilterModule(object):
         return False
 
     @staticmethod
-    def ssl_fingerprint_ja4(frontends: dict) -> bool:
+    def ssl_fingerprint_ja4(frontends: dict, defaults_frontend: dict) -> bool:
         for fe_cnf in frontends.values():
             try:
                 if fe_cnf['security']['fingerprint_ssl_type'].lower() == 'ja4':
                     return True
 
             except KeyError:
-                continue
+                try:
+                    if defaults_frontend['security']['fingerprint_ssl_type'].lower() == 'ja4':
+                        return True
+
+                except KeyError:
+                    continue
 
         return False
 

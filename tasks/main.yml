@@ -4,7 +4,6 @@
   ansible.builtin.assert:
     that:
       - haproxy is defined
-      - HAPROXY_CONFIG.version in HAPROXY_HC.valid_versions
       # make sure we will be able to auto-download geoip dbs
       - not HAPROXY_CONFIG.geoip.enable|bool or not HAPROXY_CONFIG.geoip.manage_db|bool or HAPROXY_CONFIG.geoip.token|default(none, true) is not none
       - not HAPROXY_CONFIG.geoip.enable|bool or not HAPROXY_CONFIG.geoip.manage_db|bool or HAPROXY_CONFIG.geoip.provider in HAPROXY_HC.valid_geoip_providers

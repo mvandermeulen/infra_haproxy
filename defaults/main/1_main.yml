@@ -90,7 +90,7 @@ defaults_frontend:
   security:
     headers: true
     fingerprint_ssl: false  # create and log the JA3/JA4 fingerprint of clients
-    fingerprint_ssl_type: 'ja3n'  # WARNING: ja4 is not yet in a usable state!
+    fingerprint_ssl_type: 'ja4'  # ja3n or ja4
 
     restrict_methods: false
     allow_only_methods: ['HEAD', 'GET', 'POST']
