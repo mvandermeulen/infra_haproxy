@@ -8,7 +8,7 @@
     # SSL fingerprint
 {%   if cnf.security.fingerprint_ssl_type | lower == 'ja4' and HAPROXY_CONFIG.version is version('3.1', '>=') %}
     http-request lua.fingerprint_ja4
-    http-request capture var(txn.fingerprint_ssl) len 36
+    http-request capture var(txn.fingerprint_ja4) len 36
 {%   elif cnf.security.fingerprint_ssl_type | lower == 'ja3n' %}
     http-request lua.fingerprint_ja3n
     http-request capture var(txn.fingerprint_ssl) len 32
