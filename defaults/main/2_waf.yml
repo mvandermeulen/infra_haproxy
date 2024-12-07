@@ -75,6 +75,7 @@ defaults_waf:
         - 'Metasploit'
         - 'ImageVacuum'
         - 'ELinks'
+        - 'Mozilla/2.'
         - 'Mozilla/3.0'
         - 'Mozilla/4.0'
         # python
@@ -136,6 +137,8 @@ defaults_waf:
       - 'agent'
       - 'inspect'
       - 'github-camo'
+      - 'http://'
+      - 'https://'
 
   script_kiddy:
     disable: []  # matches that should not be blocked (user-defined); checked at templating stage
