@@ -8,6 +8,8 @@ Role to deploy HAProxy (*Focus on the Community Version*)
 
 I think the `frontend` => `route` => `backend` abstraction implemented by this Role is very nice to work with. Please [give me some Feedback](https://github.com/ansibleguy/infra_haproxy/discussions)!
 
+If you are interested to integrate a full-fledged WAF into HAProxy => [check out the Coraza-WAF](https://github.com/ansibleguy/haproxy_waf_coraza)!
+
 <a href='https://ko-fi.com/ansible0guy' target='_blank'><img height='35' style='border:0px;height:46px;' src='https://az743702.vo.msecnd.net/cdn/kofi3.png?v=0' border='0' alt='Buy me a coffee' />
 
 [![Molecule Test Status](https://badges.ansibleguy.net/infra_haproxy.molecule.svg)](https://github.com/ansibleguy/_meta_cicd/blob/latest/templates/usr/local/bin/cicd/molecule.sh.j2)
@@ -342,7 +344,11 @@ ansible-vault encrypt_string
 
 * **Info**: You can test the [GeoIP Lookup Microservice](https://github.com/superstes/haproxy-geoip) manually by using curl: `curl 'http://127.0.0.1:10069/?lookup=country&ip=1.1.1.1'`
 
+
 ### WAF
+
+* **Tip**: If you are interested to integrate a full-fledged WAF into HAProxy => [check out the Coraza-WAF](https://github.com/ansibleguy/haproxy_waf_coraza)!
+
 
 * **Note**: The WAF/security feature-set this role provides does not come lose to the one [available in HAProxy Enterprise by default](https://www.haproxy.com/solutions/web-application-firewall). If you have the money - go for it.
 
