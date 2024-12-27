@@ -28,6 +28,12 @@
     http-request set-var(txn.bot) int(1) if !{ var(txn.bot) -m found } { req.fhdr(User-Agent) -m sub -i -f {{ HAPROXY_HC.path.lst }}/{{ HAPROXY_HC.file.lst.crawler_sub }} }
 {%     endif %}
 {%   endif %}
+{%   if not cnf.security.block_ai_bots | bool %}
+    ## flag well-known AI-bots
+{%     if HAPROXY_WAF.user_agents.ai_crawlers.sub | length > 0 %}
+    http-request set-var(txn.bot) int(1) if !{ var(txn.bot) -m found } { req.fhdr(User-Agent) -m sub -i -f {{ HAPROXY_HC.path.lst }}/{{ HAPROXY_HC.file.lst.ai_crawlers }} }
+{%     endif %}
+{%   endif %}
     ## unusual if action has no referrer; could produce false-positives in some special cases
     http-request set-var(txn.bot) int(1) if !{ var(txn.bot) -m found } !{ method GET HEAD } !{ req.hdr(Referer) -m found }
     ## browsers set these ones usually
@@ -60,6 +66,12 @@
     http-request deny status {{ HAPROXY_WAF.block_code }} {{ BLOCK_ERRORFILE }} if { req.fhdr(User-Agent) -m sub -i -f {{ HAPROXY_HC.path.lst }}/{{ HAPROXY_HC.file.lst.crawler_sub }} }
 {%   endif %}
 {% endif %}
+{% if not cnf.security.block_ai_bots | bool %}
+    # block well-known AI-bots
+{%   if HAPROXY_WAF.user_agents.ai_crawlers.sub | length > 0 %}
+    http-request deny status {{ HAPROXY_WAF.block_code }} {{ BLOCK_ERRORFILE }} if { req.fhdr(User-Agent) -m sub -i -f {{ HAPROXY_HC.path.lst }}/{{ HAPROXY_HC.file.lst.ai_crawlers }} }
+{%   endif %}
+{% endif %}
 {% if cnf.security.block_script_kiddies | bool %}
     # block script-kiddy requests
     acl script_kiddy_excluded path -m sub -i -f {{ HAPROXY_HC.path.lst }}/{{ HAPROXY_HC.file.lst.script_kiddy_exc }}
@@ -67,3 +79,4 @@
     http-request deny status {{ HAPROXY_WAF.block_code }} {{ BLOCK_ERRORFILE }} if !script_kiddy_excluded { path -m end -i -f {{ HAPROXY_HC.path.lst }}/{{ HAPROXY_HC.file.lst.script_kiddy_end }} }
     http-request deny status {{ HAPROXY_WAF.block_code }} {{ BLOCK_ERRORFILE }} if !script_kiddy_excluded { path -m sub -i -f {{ HAPROXY_HC.path.lst }}/{{ HAPROXY_HC.file.lst.script_kiddy_sub }} }
 {% endif %}
+

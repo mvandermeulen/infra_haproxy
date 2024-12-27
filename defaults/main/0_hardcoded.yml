@@ -38,6 +38,13 @@ HAPROXY_HC:
       bot_sub: 'waf-bot-ua-sub.lst'
       bad_bot_sub: 'waf-badbot-ua-sub.lst'
       bad_bot_full: 'waf-badbot-ua-full.lst'
+      ai_crawlers: 'waf-ai-crawler-ua-sub.lst'
+
+    coraza:
+      be: '/etc/haproxy/waf-coraza.cfg'
+      spoa: '/etc/haproxy/waf-coraza-spoa.cfg'
+
+  coraza_app_var: 'txn.waf_app'
 
   user: 'haproxy'
   group: 'haproxy'

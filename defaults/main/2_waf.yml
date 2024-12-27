@@ -1,6 +1,16 @@
 ---
 
 defaults_waf:
+  coraza:  # see: https://github.com/ansibleguy/haproxy_waf_coraza
+    enable: false
+    redirect: false
+    redirect_code: 302
+    block: true
+    block_code: 403
+    drop: true  # silent
+    log: true  # capture coraza stati in haproxy-logs
+    default_app: ''  # set a default-coraza-app for all backends
+
   # NOTE: the block-code is very limited if you want to use an errorfile!
   #   see: https://www.haproxy.com/documentation/haproxy-configuration-manual/latest/#http-request%20return
   block_code: 400
@@ -115,6 +125,27 @@ defaults_waf:
         - 'DuckDuckGo'
         # yahoo
         - 'Yahoo'
+
+    ai_crawlers:
+      sub:
+        - 'OAI-SearchBot'
+        - 'anthropic-ai'
+        - 'Claude-Web'
+        - 'Applebot-Extended'
+        - 'Bytespider'
+        - 'CCBot'
+        - 'ChatGPT-User'
+        - 'cohere-ai'
+        - 'Diffbot'
+        - 'FacebookBot'
+        - 'GoogleOther'
+        - 'Google-Extended'
+        - 'GPTBot'
+        - 'ImagesiftBot'
+        - 'PerplexityBot'
+        - 'OmigiliBot'
+        - 'Omigili'
+        - 'Amazonbot'
 
     any:
       - 'bot'
