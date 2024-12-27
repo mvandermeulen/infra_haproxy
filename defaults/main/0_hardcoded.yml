@@ -42,7 +42,7 @@ HAPROXY_HC:
 
     coraza:
       be: '/etc/haproxy/waf-coraza.cfg'
-      spoa: '/etc/haproxy/waf-coraza-spoa.cfg'
+      spoa: '/etc/haproxy/waf-coraza-spoe.cfg'
 
   coraza_app_var: 'txn.waf_app'
 

@@ -1,0 +1,21 @@
+
+    # Coraza WAF
+    filter spoe engine coraza config {{ HAPROXY_HC.file.coraza.spoa }}
+{% if HAPROXY_WAF.coraza.log | bool %}
+    http-request capture var({{ HAPROXY_HC.coraza_app_var }}) len 50
+    http-request capture var(txn.coraza.id) len 16
+    http-request capture var(txn.coraza.fail) len 1
+    http-request capture var(txn.coraza.action) len 8
+{% endif %}
+{% if HAPROXY_WAF.coraza.redirect | bool %}
+    http-request redirect code {{ HAPROXY_WAF.coraza.redirect_code }} location %[var(txn.coraza.data)] if { var(txn.coraza.action) -m str redirect }
+    http-response redirect code {{ HAPROXY_WAF.coraza.redirect_code }} location %[var(txn.coraza.data)] if { var(txn.coraza.action) -m str redirect }
+{% endif %}
+{% if HAPROXY_WAF.coraza.block | bool %}
+    http-request deny status {{ HAPROXY_WAF.coraza.block_code }} {{ BLOCK_ERRORFILE }} if { var(txn.coraza.action) -m str deny }
+    http-response deny status {{ HAPROXY_WAF.coraza.block_code }} {{ BLOCK_ERRORFILE }} if { var(txn.coraza.action) -m str deny }
+{% endif %}
+{% if HAPROXY_WAF.coraza.drop | bool %}
+    http-request silent-drop if { var(txn.coraza.action) -m str drop }
+    http-response silent-drop if { var(txn.coraza.action) -m str drop }
+{% endif %}

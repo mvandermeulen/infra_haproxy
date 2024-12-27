@@ -87,6 +87,8 @@
     mode: 0644
   notify: HAProxy-restart
   register: hap_svc_ovr
+  vars:
+    waf_coraza_cnf: "{{ ('-f ' + HAPROXY_HC.file.coraza.be) if HAPROXY_WAF.coraza.enable | bool else '' }}"
 
 - name: HAProxy | Install | Systemd Daemon-reload
   ansible.builtin.systemd:

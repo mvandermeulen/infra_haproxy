@@ -1,7 +1,8 @@
 # {{ ansible_managed }}
 # ansibleguy.infra_haproxy
 
-{% for name, cnf_user in HAPROXY_CONFIG.backends.items() %}
+{% for user_name, cnf_user in HAPROXY_CONFIG.backends.items() %}
+{%   set name = user_name | safe_key %}
 {%   set cnf = defaults_backend | combine(cnf_user, recursive=true) %}
 {%   if cnf.basic_auth.plaintext | bool and cnf.basic_auth.users | length > 0 %}
 

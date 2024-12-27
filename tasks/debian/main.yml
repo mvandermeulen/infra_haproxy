@@ -23,6 +23,13 @@
     apply:
       tags: [geoip]
 
+- name: HAProxy | Coraza WAF
+  ansible.builtin.include_role:
+    name: ansibleguy.haproxy_waf_coraza
+  when:
+    - HAPROXY_WAF.coraza.enable | bool
+    - not skip_waf | bool
+
 - name: HAProxy | Config
   ansible.builtin.include_tasks: debian/config.yml
   tags: [config]

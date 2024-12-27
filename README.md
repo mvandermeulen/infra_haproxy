@@ -2,7 +2,7 @@
 <img src="https://www.haproxy.com/assets/legal/web-logo.png" alt="HAProxy Logo" width="300"/>
 </a>
 
-# Ansible Role - HAProxy Community (with ACME, GeoIP and some WAF-Features)
+# Ansible Role - HAProxy Community (with ACME, GeoIP, WAF-Integration)
 
 Role to deploy HAProxy (*Focus on the Community Version*)
 
@@ -79,6 +79,7 @@ Here some detailed config examples and their results:
 * [Example ACME](https://github.com/ansibleguy/infra_haproxy/blob/latest/ExampleAcme.md)
 * [Example GeoIP](https://github.com/ansibleguy/infra_haproxy/blob/latest/ExampleGeoIP.md)
 * [Example WAF](https://github.com/ansibleguy/infra_haproxy/blob/latest/ExampleWAF.md)
+* [Example Coraza-WAF](https://github.com/ansibleguy/infra_haproxy/blob/latest/ExampleCorazaWAF.md)
 * [Example TCP](https://github.com/ansibleguy/infra_haproxy/blob/latest/ExampleTCP.md)
 
 ### Config

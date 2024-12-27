@@ -4,6 +4,7 @@
   ansible.builtin.assert:
     that:
       - haproxy is defined
+      - HAPROXY_CONFIG | all_route_backends_exist
       # make sure we will be able to auto-download geoip dbs
       - not HAPROXY_CONFIG.geoip.enable|bool or not HAPROXY_CONFIG.geoip.manage_db|bool or HAPROXY_CONFIG.geoip.token|default(none, true) is not none
       - not HAPROXY_CONFIG.geoip.enable|bool or not HAPROXY_CONFIG.geoip.manage_db|bool or HAPROXY_CONFIG.geoip.provider in HAPROXY_HC.valid_geoip_providers
@@ -15,16 +16,21 @@
   when: "ansible_distribution|lower in ['debian', 'ubuntu']"
 
 - name: HAProxy | Validating config
-  ansible.builtin.command: "/usr/sbin/haproxy -c -f /etc/haproxy/haproxy.cfg -f {{ HAPROXY_HC.path.config }}/"
+  ansible.builtin.command: "/usr/sbin/haproxy -c -f /etc/haproxy/haproxy.cfg -f {{ HAPROXY_HC.path.config }}/ {{ waf_coraza_cnf }}"
   tags: always
   no_log: true
   ignore_errors: true
   changed_when: false
   register: hap_error
+  failed_when: >
+    hap_error.failed or
+    '[ALERT]' in hap_error.stdout
+  vars:
+    waf_coraza_cnf: "{{ ('-f ' + HAPROXY_HC.file.coraza.be) if HAPROXY_WAF.coraza.enable | bool else '' }}"
 
 - name: HAProxy | Showing pretty error
   ansible.builtin.debug:
-    msg: "{{ hap_error.stderr_lines }}"
+    msg: "{{ hap_error.stderr_lines | default(hap_error.stdout_lines) }}"
   tags: always
   failed_when: hap_error.failed
   when: hap_error.failed

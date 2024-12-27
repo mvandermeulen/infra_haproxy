@@ -12,6 +12,8 @@ class FilterModule(object):
             "ssl_fingerprint_ja4": self.ssl_fingerprint_ja4,
             "build_route": self.build_route,
             "join_w_excludes": self.join_w_excludes,
+            "waf_coraza_apps": self.waf_coraza_apps,
+            "all_route_backends_exist": self.all_route_backends_exist,
         }
 
     @staticmethod
@@ -71,10 +73,9 @@ class FilterModule(object):
     def join_w_excludes(cls, v: list, excludes: list) -> str:
         return ' '.join([v for v in cls.ensure_list(v) if v not in cls.ensure_list(excludes)])
 
-
     # pylint: disable=R0912,R0915
     @classmethod
-    def build_route(cls, fe_cnf: dict, be_cnf: dict, be_name: str) -> list:
+    def build_route(cls, fe_cnf: dict, be_cnf: dict, be_name: str, only_condition: bool = False) -> (list, str):
         lines = []
         to_match = []
         var_prefix = f'{be_name}_filter'
@@ -145,6 +146,7 @@ class FilterModule(object):
             to_match.append(f'!{var_prefix}_statics')
             statics_to_match.append(f'{var_prefix}_statics')
 
+        condition = ''
         for loop_be, loop_match in {
             be_name: to_match,
             be_statics_name: statics_to_match
@@ -163,12 +165,44 @@ class FilterModule(object):
                         for m in loop_match[1:]:
                             loop_match_or.append(f'{d} {m}')
 
-                    lines.append(f"use_backend {loop_be} if {' || '.join(loop_match_or)}")
+                    condition = f"if {' || '.join(loop_match_or)}"
+                    lines.append(f"use_backend {loop_be} {condition}")
 
                 else:
-                    lines.append(f"use_backend {loop_be} if {' '.join(loop_match)}")
+                    condition = f"if {' '.join(loop_match)}"
+                    lines.append(f"use_backend {loop_be} {condition}")
 
             else:
                 lines.append(f"use_backend {loop_be}")
 
+        if only_condition:
+            return condition
+
         return lines
+
+    @staticmethod
+    def waf_coraza_apps(waf_cnf: dict) -> list:
+        if not isinstance(waf_cnf, dict) or 'apps' not in waf_cnf or not isinstance(waf_cnf['apps'], list):
+            return []
+
+        apps = []
+        for app in waf_cnf['apps']:
+            try:
+                apps.append(app['name'])
+
+            except KeyError:
+                pass
+
+        return apps
+
+    @classmethod
+    def all_route_backends_exist(cls, cnf: dict) -> bool:
+        existing_be_names = [cls.safe_key(name) for name in cnf['backends']]
+
+        for fe_cnf in cnf['frontends'].values():
+            for be_name_user in fe_cnf['routes']:
+                be_name = cls.safe_key(be_name_user)
+                if be_name not in existing_be_names:
+                    return False
+
+        return True

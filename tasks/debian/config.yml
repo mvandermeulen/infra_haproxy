@@ -18,6 +18,7 @@
     - "{{ HAPROXY_HC.file.lst.bot_sub }}"
     - "{{ HAPROXY_HC.file.lst.bad_bot_sub }}"
     - "{{ HAPROXY_HC.file.lst.bad_bot_full }}"
+    - "{{ HAPROXY_HC.file.lst.ai_crawlers }}"
 
 - name: HAProxy | Config | Globals/Defaults
   ansible.builtin.template:

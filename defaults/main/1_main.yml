@@ -3,6 +3,7 @@
 no_prompts: false
 debug: false
 force_update: false
+skip_waf: false
 
 # default config => is overwritten by provided config
 defaults_haproxy:
@@ -99,6 +100,7 @@ defaults_frontend:
 
     block_script_bots: false
     block_bad_crawler_bots: false
+    block_ai_bots: false
     block_script_kiddies: false  # you might have to define 'haproxy.waf.script_kiddy.excludes' for your use-cases
 
     flag_bots: false
@@ -157,11 +159,14 @@ defaults_backend:
 
     block_script_bots: false
     block_bad_crawler_bots: false
+    block_ai_bots: false
     block_script_kiddies: false  # you might have to define 'haproxy.waf.script_kiddy.excludes' for your use-cases
 
     flag_bots: false
     flag_bots_lines: []  # additional checks you want to append; you could p.e. check if a cookie set by JS exists
     # is auto-prepended: 'http-request set-var(txn.bot) int(1) if !{ var(txn.bot) -m found } ' before your conditions
+
+    coraza_app: ''  # define a specific coraza-waf-application to use (waf.apps.*.name)
 
   basic_auth:
     users: {}

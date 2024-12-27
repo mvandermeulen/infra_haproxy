@@ -2,7 +2,7 @@
 # ansibleguy.infra_haproxy
 
 {% for name, cnf_user in HAPROXY_CONFIG.frontends.items() %}
-{%    set cnf = defaults_frontend | combine(cnf_user, recursive=true) %}
+{%   set cnf = defaults_frontend | combine(cnf_user, recursive=true) %}
 frontend {{ name }}
     mode {{ cnf.mode }}
 {%   for bind in cnf.bind | ensure_list %}
@@ -47,23 +47,42 @@ frontend {{ name }}
 {%    endfor %}
 
 {%  endif %}
-{%   if cnf.acme.enable | bool %}
+{%  if cnf.acme.enable | bool %}
     use_backend be_haproxy_acme if { path_beg -i /.well-known/acme-challenge/ }
 
 {%  endif %}
-{%  for be_name, be_cnf_user in cnf.routes.items() %}
-{%    set be_cnf = defaults_frontend_route | combine(be_cnf_user, recursive=true) %}
-{%    set be_route = cnf | build_route(be_cnf, be_name) %}
+{%  for be_name_user, be_route_cnf_user in cnf.routes.items() %}
+{%    set be_name = be_name_user | safe_key %}
+{%    set be_route_cnf = defaults_frontend_route | combine(be_route_cnf_user, recursive=true) %}
+{%    set be_route = cnf | build_route(be_route_cnf, be_name) %}
+{%    set be_route_condition = cnf | build_route(be_route_cnf, be_name, true) %}
+{%    set be_cnf = HAPROXY_CONFIG.backends[be_name] %}
 
     # BACKEND {{ be_name }}
 {%    for line in be_route %}
     {{ line }}
 {%    endfor %}
+{%  if cnf.mode == 'http' and HAPROXY_WAF.coraza.enable | bool %}
+
+{%    if be_name in waf | default({}) | waf_coraza_apps %}
+    http-request set-var({{ HAPROXY_HC.coraza_app_var }}) str({{ be_name }}) {{ be_route_condition }}
+{%    elif be_cnf.security.coraza_app | default(none, true) is not none %}
+    http-request set-var({{ HAPROXY_HC.coraza_app_var }}) str({{ be_cnf.security.coraza_app }}) {{ be_route_condition }}
+{%    endif %}
+{%  endif %}
+
 
 {%  endfor %}
 
 {%  if cnf.default_backend | default(none, true) is not none %}
     default_backend {{ cnf.default_backend }}
+{%  endif %}
+
+{%  if cnf.mode == 'http' and HAPROXY_WAF.coraza.enable | bool %}
+{%    if HAPROXY_WAF.coraza.default_app | default(none, true) is not none %}
+    http-request set-var({{ HAPROXY_HC.coraza_app_var }}) str({{ HAPROXY_WAF.coraza.default_app }}) if !{ var({{ HAPROXY_HC.coraza_app_var }}) -m found }
+{%    endif %}
+{%    include "inc/waf_coraza.j2" %}
 {%  endif %}
 
 {% endfor %}
