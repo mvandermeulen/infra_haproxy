@@ -9,7 +9,7 @@ defaults_waf:
     block_code: 403
     drop: true  # silent
     log: true  # capture coraza stati in haproxy-logs
-    default_app: ''  # set a default-coraza-app for all backends
+    default_app: 'default'  # set a default-coraza-app for all backends
 
   # NOTE: the block-code is very limited if you want to use an errorfile!
   #   see: https://www.haproxy.com/documentation/haproxy-configuration-manual/latest/#http-request%20return
