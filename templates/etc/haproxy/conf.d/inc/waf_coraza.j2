@@ -5,7 +5,7 @@
 {% if HAPROXY_WAF.coraza.log | bool %}
     http-request capture var({{ HAPROXY_HC.coraza_app_var }}) len 50
     http-request capture var(txn.coraza.id) len 16
-    http-request capture var(txn.coraza.fail) len 1
+    http-request capture var(txn.coraza.error) len 1
     http-request capture var(txn.coraza.action) len 8
 {% endif %}
 {% if HAPROXY_WAF.coraza.redirect | bool %}
