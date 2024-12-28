@@ -1,5 +1,7 @@
 # Coraza WAF Example
 
+Check out the [ansibleguy.haproxy_waf_coraza Example](https://github.com/ansibleguy/haproxy_waf_coraza/blob/latest/Example.md) for a more detailed Coraza-WAF config-example!
+
 You might want to combine the actual WAF-functionality with [basic Security-checks and TLS-Fingerprinting](https://github.com/ansibleguy/infra_haproxy/blob/latest/ExampleWAF.md)!
 
 ## Config
@@ -14,6 +16,9 @@ waf:  # Role: ansibleguy.haproxy_waf_coraza
     # apis
     - name: 'app1'
       block: true
+      rules:
+        vars: ...
+        rule_changes: ...
 
     - name: 'app2'
 
@@ -171,7 +176,7 @@ root@test-ag-haproxy-waf:/# cat /etc/haproxy/conf.d/frontend.cfg
 >     acl be_app2_filter_domains req.hdr(host) -m str -i app2.ansibleguy.net
 >     use_backend be_app2 if be_app2_filter_domains
 >     
->     http-request set-var(txn.waf_app) str(be_app2) if be_app1_filter_domains
+>     http-request set-var(txn.waf_app) str(be_app2) if be_app2_filter_domains
 > 
 >     # Coraza WAF
 >     http-request set-var(txn.waf_app) str(default) if !{ var(txn.waf_app) -m found }
@@ -180,7 +185,7 @@ root@test-ag-haproxy-waf:/# cat /etc/haproxy/conf.d/frontend.cfg
 >     http-request send-spoe-group coraza coraza-req
 >     http-request capture var(txn.waf_app) len 50
 >     http-request capture var(txn.coraza.id) len 16
->     http-request capture var(txn.coraza.fail) len 1
+>     http-request capture var(txn.coraza.error) len 1
 >     http-request capture var(txn.coraza.action) len 8
 >     http-request deny status 403 default-errorfiles if { var(txn.coraza.action) -m str deny }
 >     http-response deny status 403 default-errorfiles if { var(txn.coraza.action) -m str deny }
