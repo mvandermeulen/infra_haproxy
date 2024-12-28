@@ -1,6 +1,7 @@
 
     # Coraza WAF
     filter spoe engine coraza config {{ HAPROXY_HC.file.coraza.spoa }}
+    http-request send-spoe-group coraza coraza-req
 {% if HAPROXY_WAF.coraza.log | bool %}
     http-request capture var({{ HAPROXY_HC.coraza_app_var }}) len 50
     http-request capture var(txn.coraza.id) len 16
