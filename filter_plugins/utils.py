@@ -73,7 +73,7 @@ class FilterModule(object):
     def join_w_excludes(cls, v: list, excludes: list) -> str:
         return ' '.join([v for v in cls.ensure_list(v) if v not in cls.ensure_list(excludes)])
 
-    # pylint: disable=R0912,R0915
+    # pylint: disable=R0912,R0915,R0914
     @classmethod
     def build_route(cls, fe_cnf: dict, be_cnf: dict, be_name: str, only_condition: bool = False) -> (list, str):
         lines = []
