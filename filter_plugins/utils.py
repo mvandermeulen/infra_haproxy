@@ -14,6 +14,7 @@ class FilterModule(object):
             "join_w_excludes": self.join_w_excludes,
             "waf_coraza_apps": self.waf_coraza_apps,
             "all_route_backends_exist": self.all_route_backends_exist,
+            "domains_not_routed": self.domains_not_routed,
         }
 
     @staticmethod
@@ -206,3 +207,15 @@ class FilterModule(object):
                     return False
 
         return True
+
+    @classmethod
+    def domains_not_routed(cls, fe_domains: list, routes: dict) -> list:
+        be_domains = []
+
+        for cnf in routes.values():
+            if 'domains' not in cnf:
+                continue
+
+            be_domains.extend(cls.ensure_list(cnf['domains']))
+
+        return [d for d in cls.ensure_list(fe_domains) if d not in be_domains]

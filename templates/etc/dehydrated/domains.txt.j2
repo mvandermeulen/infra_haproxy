@@ -9,7 +9,7 @@
 {%   set fe_cnf = defaults_frontend | combine(fe_cnf_user, recursive=true) %}
 # FRONTEND: {{ fe_name }}
 {%   if fe_cnf.acme.domains | default([]) | ensure_list | length > 0 %}
-{{ fe_cnf.acme.domains | default([]) | ensure_list | join(' ') }} > {{ fe_name | safe_key }}
+{{ fe_cnf.acme.domains | default([]) | domains_not_routed(fe_cnf.routes) | join(' ') }} > {{ fe_name | safe_key }}
 {%   endif %}
 {%   for be_name, be_cnf_user in fe_cnf.routes.items() %}
 {%     set be_cnf = defaults_backend | combine(be_cnf_user, recursive=true) %}
