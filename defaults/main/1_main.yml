@@ -56,6 +56,16 @@ defaults_haproxy:
     DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384"
     ssl-default-bind-ciphersuites: 'TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256'
     ssl-default-bind-options: 'ssl-min-ver TLSv1.2 no-tls-tickets'
+    setenv:
+      HTTPLOG_JSON: '%{+json}o %(client_ip)ci %(client_port)cp %(request_date)tr %(fe_name_transport)ft %(be_name)b 
+      %(server_name)s %(time_request)TR %(time_wait)Tw %(time_connect)Tc %(time_response)Tr/%(time_active)Ta 
+      %(status_code)ST %(bytes_read)B %(captured_request_cookie)CC %(captured_response_cookie)CS 
+      %(termination_state_cookie)tsc %(actconn)ac %(feconn)fc %(beconn)bc %(srv_conn)sc %(retries)rc %(srv_queue)sq 
+      %(backend_queue)bq %(captured_request_headers)hr %(captured_response_headers)hs %(http_request){+Q}r'
+      TCPLOG_JSON: '%{+json}o %(client_ip)ci %(client_port)cp %(request_date)t %(fe_name_transport)ft %(be_name)b 
+      %(server_name)s %(time_wait)Tw %(time_connect)Tc %(time_total)Tt %(bytes_read)B 
+      %(termination_state)ts %(actconn)ac %(feconn)fc %(beconn)bc %(srv_conn)sc %(retries)rc %(srv_queue)sq 
+      %(backend_queue)bq %(captured_request_headers)hr %(captured_response_headers)hs'
 
   defaults:
     log: 'global'

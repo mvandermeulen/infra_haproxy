@@ -25,6 +25,10 @@ global
 
 {% for key, value in HAPROXY_CONFIG.global.items() %}
 {%   if value | default(none, true) is none %}
+{%   elif value | is_dict %}
+{%     for value_key, value_entry in value.items() %}
+    {{ key }} {{ value_key }} "{{ value_entry }}"
+{%     endfor %}
 {%   elif value | is_string %}
     {{ key }} {{ value }}
 {%   else %}
