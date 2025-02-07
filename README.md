@@ -10,7 +10,6 @@ I think the `frontend` => `route` => `backend` abstraction implemented by this R
 
 If you are interested to integrate a full-fledged WAF into HAProxy => [check out the Coraza-WAF](https://github.com/ansibleguy/haproxy_waf_coraza)!
 
-<a href='https://ko-fi.com/ansible0guy' target='_blank'><img height='35' style='border:0px;height:46px;' src='https://az743702.vo.msecnd.net/cdn/kofi3.png?v=0' border='0' alt='Buy me a coffee' />
 
 [![Molecule Test Status](https://badges.ansibleguy.net/infra_haproxy.molecule.svg)](https://github.com/ansibleguy/_meta_cicd/blob/latest/templates/usr/local/bin/cicd/molecule.sh.j2)
 [![YamlLint Test Status](https://badges.ansibleguy.net/infra_haproxy.yamllint.svg)](https://github.com/ansibleguy/_meta_cicd/blob/latest/templates/usr/local/bin/cicd/yamllint.sh.j2)
