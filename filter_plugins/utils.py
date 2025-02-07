@@ -5,6 +5,7 @@ class FilterModule(object):
     def filters(self):
         return {
             "ensure_list": self.ensure_list,
+            "exclude": self.exclude,
             "is_string": self.is_string,
             "is_dict": self.is_dict,
             "safe_key": self.safe_key,
@@ -28,6 +29,11 @@ class FilterModule(object):
     @staticmethod
     def is_string(data) -> bool:
         return isinstance(data, str)
+
+    @classmethod
+    def exclude(cls, data: list, excludes: list) -> list:
+        data, excludes = cls.ensure_list(data), cls.ensure_list(excludes)
+        return [d for d in data if d not in excludes]
 
     @staticmethod
     def is_dict(data) -> bool:

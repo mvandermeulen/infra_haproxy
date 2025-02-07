@@ -33,6 +33,7 @@ defaults_haproxy:
     challenge_port: 8405  # port the webserver for challenge-responses listens on
     ca: 'letsencrypt'
     domains: []
+    domains_ignore: []
 
   geoip:
     enable: false
