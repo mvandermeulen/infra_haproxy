@@ -22,6 +22,9 @@ global
 {%     endif %}
 {%   endif %}
 {% endif %}
+{% if HAPROXY_CONFIG.frontends | http_fingerprint_ja4h_active %}
+    lua-load {{ HAPROXY_HC.path.lua }}/ja4h.lua
+{% endif %}
 
 {% for key, value in HAPROXY_CONFIG.global.items() %}
 {%   if value | default(none, true) is none %}

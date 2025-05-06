@@ -14,3 +14,7 @@
     http-request capture var(txn.fingerprint_ssl) len 32
 {%   endif %}
 {% endif %}
+{% if cnf.security.fingerprint_ja4h | bool %}
+    http-request lua.fingerprint_ja4h
+    http-request capture var(txn.fingerprint_ja4h) len 51
+{% endif %}
