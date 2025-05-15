@@ -128,13 +128,14 @@ defaults_waf:
 
     ai_crawlers:
       sub:
+        # see: https://momenticmarketing.com/blog/ai-search-crawlers-bots
         - 'OAI-SearchBot'
         - 'anthropic-ai'
-        - 'Claude-Web'
+        - 'claude-web'
         - 'Applebot-Extended'
         - 'Bytespider'
         - 'CCBot'
-        - 'ChatGPT-User'
+        - 'ChatGPT'
         - 'cohere-ai'
         - 'Diffbot'
         - 'FacebookBot'
@@ -143,9 +144,19 @@ defaults_waf:
         - 'GPTBot'
         - 'ImagesiftBot'
         - 'PerplexityBot'
-        - 'OmigiliBot'
         - 'Omigili'
         - 'Amazonbot'
+        - 'MistralAI'
+        - 'Perplexity'
+        - 'OAI-SearchBot'
+        - 'ClaudeBot'
+        - 'Amazonbot'
+        - 'AI2Bot'
+        - 'CCBot'
+        - 'Diffbot'
+        - 'YouBot'
+        - 'TimpiBot'
+        - 'LinkedInBot'
 
     any:
       - 'bot'
