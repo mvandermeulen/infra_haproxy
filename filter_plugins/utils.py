@@ -11,6 +11,7 @@ class FilterModule(object):
             "safe_key": self.safe_key,
             "ssl_fingerprint_active": self.ssl_fingerprint_active,
             "ssl_fingerprint_ja4": self.ssl_fingerprint_ja4,
+            "http_fingerprint_ja4h_active": self.http_fingerprint_ja4h_active,
             "build_route": self.build_route,
             "join_w_excludes": self.join_w_excludes,
             "waf_coraza_apps": self.waf_coraza_apps,
@@ -69,6 +70,18 @@ class FilterModule(object):
 
                 except KeyError:
                     continue
+
+        return False
+
+    @staticmethod
+    def http_fingerprint_ja4h_active(frontends: dict) -> bool:
+        for fe_cnf in frontends.values():
+            try:
+                if fe_cnf['security']['fingerprint_ja4h']:
+                    return True
+
+            except KeyError:
+                continue
 
         return False
 
