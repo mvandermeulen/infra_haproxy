@@ -25,8 +25,8 @@ frontend {{ name }}
 {%   endif %}
 {% if cnf.mode == 'http' %}
     http-request set-header X-Forwarded-For %[src]
-{%   include "inc/security.j2" %}
 {%   include "inc/security_only_fe.j2" %}
+{%   include "inc/security.j2" %}
 
 {%   if cnf.log.user_agent | bool %}
     http-request capture req.fhdr(User-Agent) len 200
