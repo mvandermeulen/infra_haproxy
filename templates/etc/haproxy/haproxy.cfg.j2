@@ -13,7 +13,7 @@ global
 {%   if HAPROXY_CONFIG.frontends | ssl_fingerprint_ja4(defaults_frontend) and HAPROXY_CONFIG.version is version('3.1', '>=') %}
     lua-load {{ HAPROXY_HC.path.lua }}/ja4.lua
 {%     if 'tune.ssl.capture-buffer-size' not in HAPROXY_CONFIG.global %}
-    tune.ssl.capture-buffer-size 128
+    tune.ssl.capture-buffer-size 192
 {%     endif %}
 {%  else %}
     lua-load {{ HAPROXY_HC.path.lua }}/ja3n.lua
